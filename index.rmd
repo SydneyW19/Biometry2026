@@ -1,0 +1,77 @@
+---
+title: "Assignment 1 Data Exploration"
+author: "Sydney Whitlock"
+date: "2026-09-16"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Researchers examined mercury (Hg) and corticosterone (CORT) levels in feathers and compared them with birds’ body condition. Findings suggest that mercury exposure in the Amazon during winter may have carryover effects on Purple Martins after they return to North America, potentially affecting migration, survival, and population declines.
+
+```{r}
+setwd("C:/Users/sgwhi/OneDrive/Biometry 2026/effects-of-mercury-contamination-on-purple-martins-main")
+
+# Load packages
+library(readxl)
+library(dplyr)
+
+# Load data
+my_data <- read.csv("FloridaWisconsinVirginia.csv") 
+
+class(my_data)
+
+# Dropping Sample.ID and Band.ID from dataset
+
+df_new <- my_data %>% select(Mass:Cort)
+
+# Variables of interest: Mass, Sex, Hg, Blood.Hg, Cort
+str(df_new)
+
+# Cleanup
+glimpse(df_new)
+
+#Summary Statistics
+summary(df_new)
+
+#Figure 1
+data <- df_new[c("Mass","Hg","Blood.Hg","Cort")]
+round(cor(data),2)
+pairs(data,
+      main = "Figure 1: Correlations between Key Variables",
+      pch=16, 
+      cex =0.3, 
+      col=rgb(0,0,0,1))
+# Figure 1: Scatter-plot matrix. Each diagonal box contains the name of a variable, acting as the label for its corresponding row and column. "Mass" corresponds to body mass, "Hg" to mercury levels in feathers, "Blood.Hg" to blood mercury levels, and "Cort" to corticosterone levels.
+
+# Figure 2
+boxplot(Hg ~ State, data = my_data,
+        xlab = "State",
+        ylab = "Hg (ug/g)",
+        main = "Figure 2: Mercury Levels by State",
+        col = "lightgray",
+        las = 1)
+
+# Figure 2: Figure 2 shows a box-and-whisker plot comparing mercury (Hg) levels across three states (Florida, Virginia, Wisconsin).Median mercury levels are similar across all three states, sitting between 2.3 and 2.7 ug/g.
+
+# Figure 3
+male_data <- df_new %>% filter(Sex == "M")
+hist(male_data$Hg,
+main = "Figure 3: Mercury (Hg) content: Males",
+xlab = "Hg (ug/g)",
+col = "lightblue")
+
+# Figure 3 is a histogram showing the distribution of mercury (Hg) content in the males sampled. The x-axis shows the mercury concentration measured in micro-grams per gram (ug/g). The y-axis shows the total count of individual males in each concentration range. 
+
+#Figure 4
+female_data <- df_new %>% filter(Sex == "F")
+hist(female_data$Hg,
+     main = "Figure 4: Mercury (Hg) content: Females",
+     xlab = "Hg (ug/g)",
+     col = "lightgreen")
+
+# Figure 4 is a histogram showing the distribution of mercury (Hg) content in the females sampled. The x-axis shows the mercury concentration measured in micro-grams per gram (ug/g). The y-axis shows the total count of individual females in each concentration range. 
+
+```

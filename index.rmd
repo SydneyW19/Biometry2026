@@ -2,8 +2,7 @@
 title: "Assignment 1 Data Exploration"
 author: "Sydney Whitlock"
 date: "2026-09-16"
-output: github_document
----
+output: index.htmlx
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
